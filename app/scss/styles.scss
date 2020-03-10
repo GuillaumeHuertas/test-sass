@@ -1,3 +1,19 @@
-.testing {
-  width: percentage(4/7);
+$primaryColor: orange;
+
+@import 'header';
+
+body {
+  background-color: yellow;
+}
+
+footer {
+  padding: 50px;
+  background-color: $primaryColor;
+  span {
+    color: aliceblue;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }

@@ -1,11 +1,28 @@
 $primaryColor: orange;
 
+// Importe la feuille de style _header.scss pas besoin de mettre le _
 @import 'header';
 
+// Il faut déclarer une mixin AVANT de l'utiliser
+@mixin googleFonts($font) {
+  @import url('https://fonts.googleapis.com/css2?family=#{$font}');
+}
+
+// Fonts
+// Déclare la police (font) Roboto de google pour l'utiliser plus bas
+@include googleFonts(Roboto);
+@include googleFonts('Noto+Sans+TC');
+
+// mixin avec paramètre $degres
 @mixin border-radius($degres) {
   -moz-border-radius: $degres;
   -webkit-border-radius: $degres;
   border-radius: $degres;
+}
+
+// Définition d'une fonction non native (à définir avant d'appeler)
+@function fonctionTest($nombreA, $nombreB) {
+  @return $nombreA / $nombreB + $nombreA;
 }
 
 body {
@@ -14,17 +31,25 @@ body {
 
 footer {
   padding: 50px;
+  font-family: 'Roboto', sans-serif;
   background-color: $primaryColor;
+  // Appel de la mixin avec précision du paramètre
   @include border-radius(40px);
+  // Appel de fonction
+  content: fonctionTest(15, 3);
+
+  // Les spans inclus dans le footer
   span {
     color: aliceblue;
-
+    // le & permet de ne pas répéter le span (correspond au this)
     &:hover {
       text-decoration: underline;
     }
   }
 }
 
+// Le % permet de faire hériter un bloc de propriétés
+// à utiliser quand il n'y a pas de paramètres
 %alert {
   border: 1px solid #ccc;
   padding: 15px;
@@ -33,14 +58,17 @@ footer {
 }
 
 .alert-green {
+  // le @extend permet d'inclure un bloc de propriétés
   @extend %alert;
   background-color: green;
 }
 .alert-red {
   @extend %alert;
+  font-family: 'Noto+Sans+TC', sans-serif;
   background-color: red;
 }
 
+// Bloc de prorpiétéS que l'on peut appeler permet d'utiliser des paramètres
 @mixin center {
   margin-left: auto;
   margin-right: auto;
@@ -48,6 +76,7 @@ footer {
 
 #logo {
   width: 135px;
+  // @include permet d'importer une mixin
   @include center;
 }
 

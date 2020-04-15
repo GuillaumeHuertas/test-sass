@@ -21,5 +21,6 @@ gulp.task('useref', function(){
 
 
 gulp.task('watch', function(){
-    gulp.watch('app/scss/**/*.scss', gulp.series(['sass']));
+    gulp.watch('app/scss/**/*.scss', gulp.series(['sass', 'useref']));
+    // gulp.watch('app/*.html', gulp.series(['useref']));
 });

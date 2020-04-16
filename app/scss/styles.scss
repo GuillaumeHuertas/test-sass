@@ -1,5 +1,24 @@
 $primaryColor: orange;
 
+$theme: 'white';
+
+/**
+  Listes
+ */
+$list: banane, poire, peche, angular;
+// Rajouter dynamiquement une valeur à une liste
+$fruit: pomme;
+// Ajoute la variable fruit à la list avec le séparateur virgule
+$list: append($list, $fruit, comma);
+// Même chose en indiquant directement la valeur à ajouter
+$list: append($list, "prune", comma);
+
+/**
+  Map
+ */
+$default: ( color: blue, font-size: 1em );
+
+
 // Importe la feuille de style _header.scss pas besoin de mettre le _
 @import 'header';
 
@@ -20,13 +39,29 @@ $primaryColor: orange;
   border-radius: $degres;
 }
 
+%theme {
+  @if ($theme == "purple") {
+    color: purple;
+    background-color: white;
+  } @else if ($theme == "white") {
+    color: black;
+    background-color: white;
+  } @else if ($theme == "black") {
+    color: white;
+    background-color: black;
+  } @else {
+    color: blue;
+    background-color: gray;
+  }
+}
+
 // Définition d'une fonction non native (à définir avant d'appeler)
 @function fonctionTest($nombreA, $nombreB) {
   @return $nombreA / $nombreB + $nombreA;
 }
 
 body {
-  background-color: yellow;
+  @extend %theme;
 }
 
 footer {
@@ -38,9 +73,18 @@ footer {
   // Appel de fonction
   content: fonctionTest(15, 3);
 
+  // Permet de remettre le h1 à la base du css malgré l'héritage
+  @at-root {
+    h1 {
+      color: blue;
+    }
+  }
+
   // Les spans inclus dans le footer
   span {
     color: aliceblue;
+    // Récupère le premier indexe de la liste
+    content: nth($list, 1);
     // le & permet de ne pas répéter le span (correspond au this)
     &:hover {
       text-decoration: underline;
@@ -76,6 +120,8 @@ footer {
 
 #logo {
   width: 135px;
+  // Pour récupérer les valeurs de la map
+  color: map-get($default, color);
   // @include permet d'importer une mixin
   @include center;
 }
@@ -84,3 +130,49 @@ footer {
   width: 150px;
   @include center;
 }
+
+$i: 0;
+
+@while $i <= 6 {
+  .grid-#{$i} {
+    width: 100px*$i;
+  }
+  $i: $i + 1;
+}
+
+// Il faut préciser la valeur de départ et celle d'arriver
+@for $i from 1 through 6 {
+  // #{$i} permet d'ajouter des variables à l'id
+  .grid-#{$i} {
+    width: 100px*$i;
+  }
+}
+
+// $list est une liste de valeurs
+@each $name in $list {
+  .#{$name}-icon {
+    // il faut avoir l'image dans le dossier pour pouvoir l'appeler
+    background-image: url('../images/#{$name}.png');
+    background-repeat: no-repeat;
+    width: 250px;
+    height: 200px;
+    padding: 0;
+  }
+}
+
+$color-map: ( rouge: red, vert: green, violet: purple, gris: grey, bleue: blue );
+// each avec une map
+@each $key, $value in $color-map {
+  .couleur-#{$key} {
+    color: #{$value};
+  }
+}
+
+//@each $key, $value in $color-map {
+//  .couleur-$key {
+//    color: $value;
+//  }
+//}
+
+
+
